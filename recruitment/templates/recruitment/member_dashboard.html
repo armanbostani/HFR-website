@@ -58,6 +58,15 @@
             font-size: 14.5px; color: var(--grey-light); line-height: 1.7;
         }
         .lead-note a { color: var(--gold); }
+
+        .panel.forum-panel {
+            display: flex; align-items: center; justify-content: space-between; gap: 28px;
+            margin-bottom: 20px; background: var(--card); border: 1px solid rgba(255,208,0,0.45);
+        }
+        .panel.forum-panel h3 { color: var(--gold); }
+        .panel.forum-panel p { color: var(--grey-light); max-width: 560px; }
+        .panel.forum-panel .btn-primary { flex-shrink: 0; }
+        @media (max-width: 700px) { .panel.forum-panel { flex-direction: column; align-items: flex-start; } }
 {% endblock %}
 
 {% block content %}
@@ -71,6 +80,17 @@
         <p>You are an HFR member. Once you are placed on a team, it will show up here.</p>
     {% endif %}
 </div>
+
+{% if forum_url %}
+<div class="panel forum-panel">
+    <div>
+        <h3>Members' forum</h3>
+        <div class="big">Where the work gets written down</div>
+        <p>Worklogs, design discussions, change requests and the knowledge base live on the forum. Your website login gets you in.</p>
+    </div>
+    <a class="btn-primary" href="{% url 'forum' %}">Open the forum</a>
+</div>
+{% endif %}
 
 <div class="panels">
     <div>

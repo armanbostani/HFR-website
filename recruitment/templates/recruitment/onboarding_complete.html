@@ -13,6 +13,7 @@
             <li>🏎️ &nbsp;Explore every <a href="{% url 'divisions' %}" style="color:var(--orange);">division</a>: land, sea and air</li>
             <li>📅 &nbsp;See what's coming up in <a href="{% url 'events' %}" style="color:var(--orange);">events</a></li>
             <li>👥 &nbsp;Access the <a href="{% url 'member_home' %}" style="color:var(--orange);">members area</a></li>
+            {% if forum_url %}<li>💬 &nbsp;Introduce yourself on the <a href="{% url 'forum' %}" style="color:var(--orange);">members' forum</a></li>{% endif %}
             {% if is_lead %}<li>📋 &nbsp;Run recruitment from your <a href="{% url 'lead_dashboard' %}" style="color:var(--orange);">dashboard</a></li>{% endif %}
         </ul>
     </div>

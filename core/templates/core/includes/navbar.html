@@ -36,6 +36,7 @@
 <aside id="hfr-account-rail" class="hfr-rail hfr-rail--right" aria-hidden="true">
     <nav class="hfr-rail-nav">
         <a href="#" data-key="profile">Profile</a>
+        {% if forum_url %}<a href="#" data-key="forum">Forum</a>{% endif %}
         <a href="#" data-key="store">Store</a>
     </nav>
     <form method="post" action="{% url 'logout' %}" class="hfr-logout">

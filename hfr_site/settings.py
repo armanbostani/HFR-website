@@ -57,6 +57,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.site',
             ],
         },
     },
@@ -98,7 +99,17 @@ else:
     EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_USER', '')
     EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_PASSWORD', '')
     EMAIL_USE_TLS = os.environ.get('DJANGO_EMAIL_USE_TLS', '1') == '1'
-DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', 'HFR <hfr@glasgow.ac.uk>')
+# The society's contact address, shown wherever the public site says "email
+# us" (store orders, sponsorship, donations). One variable changes it everywhere.
+CONTACT_EMAIL = os.environ.get('HFR_CONTACT_EMAIL', 'hfr@glasgow.ac.uk')
+DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', f'HFR <{CONTACT_EMAIL}>')
+
+# Members' forum (Discourse). While FORUM_URL is empty the site shows nothing
+# about the forum. Setting DISCOURSE_CONNECT_SECRET as well switches on single
+# sign-on, so members log in to the forum with their website account
+# (see DEPLOYMENT.md).
+FORUM_URL = os.environ.get('HFR_FORUM_URL', '').strip().rstrip('/')
+DISCOURSE_CONNECT_SECRET = os.environ.get('HFR_DISCOURSE_CONNECT_SECRET', '')
 
 AUTHENTICATION_BACKENDS = ['recruitment.backends.FlexibleLoginBackend']
 

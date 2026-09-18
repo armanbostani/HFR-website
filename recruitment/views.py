@@ -1,11 +1,17 @@
+import base64
+import hashlib
+import hmac
 from functools import wraps
+from urllib.parse import parse_qs, urlencode, urlsplit
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
-from django.http import FileResponse
+from django.http import FileResponse, Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 
 from .forms import (
@@ -365,3 +371,80 @@ def lead_action(request, app_id, action):
     else:
         messages.error(request, 'Unknown action.')
     return redirect('lead_dashboard')
+
+
+# ── Forum (Discourse) ───────────────────────────────────────────────────────
+
+@member_only
+def forum(request):
+    """The members' way into the forum. Until HFR_FORUM_URL is set there is
+    nothing here, and nothing on the site links to it."""
+    if not settings.FORUM_URL:
+        raise Http404
+    return redirect(settings.FORUM_URL)
+
+
+def forum_groups(user):
+    """Discourse groups a member is added to on sign-in: their division, plus
+    a leads group for team leads. Names the forum doesn't know are ignored."""
+    groups = set()
+    application = Application.objects.filter(
+        applicant=user, status=Application.STATUS_ACCEPTED
+    ).select_related('first_pick', 'alternative', 'wildcard').first()
+    if application:
+        groups.add(application.current_team.division)
+    for team in user.led_teams.all():
+        groups.add(team.division)
+        groups.add('team-leads')
+    if user.is_staff:
+        groups.add('exec')
+    return sorted(groups)
+
+
+@member_only
+def discourse_connect(request):
+    """DiscourseConnect provider. The forum sends people here to log in and we
+    send them back with who they are, signed with the shared secret, so the
+    website account is the only forum account anyone needs. Only onboarded
+    members and team leads get past member_only, so only they can reach the
+    forum at all."""
+    secret = settings.DISCOURSE_CONNECT_SECRET
+    if not (secret and settings.FORUM_URL):
+        raise Http404
+
+    payload = request.GET.get('sso', '')
+    signature = request.GET.get('sig', '')
+    expected = hmac.new(secret.encode(), payload.encode(), hashlib.sha256).hexdigest()
+    if not (payload and signature and hmac.compare_digest(expected, signature)):
+        return HttpResponseBadRequest('Bad forum sign-in request.')
+
+    try:
+        inbound = parse_qs(base64.b64decode(payload).decode())
+        nonce = inbound['nonce'][0]
+        return_url = inbound['return_sso_url'][0]
+    except (ValueError, KeyError, UnicodeDecodeError):
+        return HttpResponseBadRequest('Bad forum sign-in request.')
+    if not url_has_allowed_host_and_scheme(
+        return_url,
+        allowed_hosts={urlsplit(settings.FORUM_URL).netloc},
+        require_https=settings.FORUM_URL.startswith('https://'),
+    ):
+        return HttpResponseBadRequest('Bad forum sign-in request.')
+
+    user = request.user
+    profile = get_profile(user)
+    fields = {
+        'nonce': nonce,
+        'external_id': user.pk,
+        'email': user.email,
+        'username': profile.display_name or user.username,
+        'name': user.get_full_name() or profile.display_name or user.username,
+        'require_activation': 'false',
+        'add_groups': ','.join(forum_groups(user)),
+    }
+    if profile.avatar:
+        fields['avatar_url'] = request.build_absolute_uri(profile.avatar.url)
+
+    outbound = base64.b64encode(urlencode(fields).encode()).decode()
+    outbound_sig = hmac.new(secret.encode(), outbound.encode(), hashlib.sha256).hexdigest()
+    return redirect(f"{return_url}?{urlencode({'sso': outbound, 'sig': outbound_sig})}")

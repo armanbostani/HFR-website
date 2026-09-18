@@ -42,6 +42,10 @@ urlpatterns = [
     path('members/dashboard/', views.member_dashboard, name='member_dashboard'),
     path('members/profile/', views.edit_profile, name='edit_profile'),
 
+    # Forum (Discourse): the members' entry point and the single sign-on endpoint
+    path('forum/', views.forum, name='forum'),
+    path('forum/sso/', views.discourse_connect, name='discourse_connect'),
+
     # Team leads
     path('recruitment/dashboard/', views.lead_dashboard, name='lead_dashboard'),
     path('recruitment/application/<int:app_id>/cv/', views.application_cv, name='application_cv'),

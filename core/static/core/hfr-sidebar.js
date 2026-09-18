@@ -135,6 +135,10 @@
       { title: 'DASHBOARD',    href: '/members/dashboard/' },
       { title: 'EDIT PROFILE', href: '/members/profile/' }
     ]},
+    // Only offered when the site is configured with a forum address
+    forum: { label: 'Forum', cards: [
+      { title: 'OPEN THE FORUM', href: '/forum/' }
+    ]},
     store: { label: 'Store', cards: [
       { title: 'STORE', href: '/shop/' }
     ]}
