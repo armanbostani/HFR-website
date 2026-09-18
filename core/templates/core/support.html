@@ -141,7 +141,7 @@
                 message,
             ].join('\n');
 
-            window.location.href = 'mailto:hfr@glasgow.ac.uk?subject='
+            window.location.href = 'mailto:{{ contact_email }}?subject='
                 + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
         });
     })();

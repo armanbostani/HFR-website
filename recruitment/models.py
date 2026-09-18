@@ -6,9 +6,11 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils import timezone
 
-# CVs are personal data: kept outside MEDIA_ROOT with no public URL,
-# reachable only through the lead-checked download view.
-private_storage = FileSystemStorage(location=settings.PRIVATE_MEDIA_ROOT)
+def private_storage():
+    """CVs are personal data: kept outside MEDIA_ROOT with no public URL,
+    reachable only through the lead-checked download view. A callable, so the
+    folder's absolute path is never written into a migration."""
+    return FileSystemStorage(location=settings.PRIVATE_MEDIA_ROOT)
 
 
 class RecruitmentSettings(models.Model):
