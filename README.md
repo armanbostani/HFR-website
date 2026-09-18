@@ -5,9 +5,34 @@ society building hydrogen powered vehicles for land, sea and air. The site is th
 public face of the society and runs the recruitment flow: applications, team lead
 draft boards, and the member area.
 
-Live divisions: Land (Shell Eco-Marathon endurance vehicle), Sea (Vital Spark,
-Monaco Energy Boat Challenge), Air (hydrogen plane concept with UGA), and
-Operations (business, finance, creative direction).
+Live divisions: Land (Shell Eco-Marathon endurance vehicle), Sea (Energy Class
+boat for the Monaco Energy Boat Challenge), Air (hydrogen plane concept with
+UGA), and Operations (business, finance, creative direction).
+
+## Team structure
+
+Sub-teams live in the database (`recruitment.Team`) and are seeded by
+migration. The division pages and the application form both read from it, so
+the committee edits teams in the admin rather than in templates.
+
+| Division | Sub-teams |
+| --- | --- |
+| Land | Data & Telemetry, Electrical, Chassis & Component, Vehicle Dynamics, Aerodynamics, HFC |
+| Sea | Cockpit & Structures, Hydrogen Systems, Fuel Cell & Power, Propulsion & Performance, Controls & Electronics (provisional) |
+| Air | Aerodynamics, Structures, Avionics & Flight Operations (all UGA-led, listed but not recruiting here); Propulsion, Energy Management & HFC (HFR) |
+| Operations | Business, Finance & Contracts (Creative Direction exists but is switched off) |
+
+A team's `partner` field marks it as run by another society; the division page
+shows the badge and the application form leaves it out.
+
+## Members' forum
+
+The society forum (Discourse) is reachable from the site once `HFR_FORUM_URL`
+is set: a Forum entry in the member account menu, a panel on the member
+dashboard, and `/forum/` for members only. With `HFR_DISCOURSE_CONNECT_SECRET`
+set as well, the site acts as the forum's login (DiscourseConnect at
+`/forum/sso/`), so a website account is the only account a member needs.
+Details in [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Tech stack
 
@@ -89,6 +114,10 @@ never shipping the development database.
 
 ## Design reference
 
-The site follows the v2 wireframes. The extracted spec, including what is still
+The site follows the v2 wireframes. The hero video is `core/static/core/hero-loop.mp4`
+(H.264 in an MP4 container, so it plays in Firefox too; the original QuickTime
+export did not).
+
+The extracted spec, including what is still
 unbuilt (member events, tasks, objectives, member store) and the decisions the
 committee still owes, lives in [docs/wireframe-spec.md](docs/wireframe-spec.md).
