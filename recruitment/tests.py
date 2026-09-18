@@ -18,7 +18,9 @@ def fake_cv():
 class RecruitmentFlowTests(TestCase):
     def setUp(self):
         self.season = RecruitmentSettings.load()
-        self.teams = list(Team.objects.all()[:3])
+        # Only recruiting teams can be drafted; partner-led ones are listed on
+        # the site but recruit elsewhere
+        self.teams = list(Team.objects.filter(is_recruiting=True)[:3])
         self.lead = User.objects.create_user('leader', 'lead@hfr.org', 'pw-lead-123')
         Profile.objects.create(user=self.lead, role=Profile.ROLE_MEMBER)
         self.teams[0].leads.add(self.lead)

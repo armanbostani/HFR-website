@@ -67,6 +67,41 @@
         }
         .dv-stat .l { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--grey); }
 
+        /* SUB-TEAMS */
+        .dv-teams {
+            background: var(--deep, #0b0b0b); padding: 120px 30px;
+            border-top: 1px solid rgba(255,255,255,0.07);
+        }
+        .dv-teams-inner { max-width: 1100px; margin: 0 auto; }
+        .dv-teams h2 {
+            font-family: 'IBM Plex Serif', serif; font-size: clamp(30px, 4vw, 48px);
+            font-weight: 400; letter-spacing: 2px; text-align: center; margin-bottom: 16px;
+        }
+        .dv-teams h2 em { font-style: normal; color: var(--div-accent); }
+        .dv-teams-lede {
+            font-size: 15.5px; font-weight: 300; color: var(--grey-light); line-height: 1.7;
+            max-width: 660px; margin: 0 auto 56px; text-align: center;
+        }
+        .dv-team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+        .dv-team {
+            padding: 30px 28px; border-radius: 10px; background: #0f0f0f;
+            border: 1px solid rgba(255,255,255,0.08); border-top: 3px solid var(--div-accent);
+            transition: transform .3s ease;
+        }
+        .dv-team:hover { transform: translateY(-4px); }
+        .dv-team.partner { border-top-color: rgba(255,255,255,0.18); }
+        .dv-team-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+        .dv-team h3 { font-family: 'IBM Plex Serif', serif; font-size: 20px; font-weight: 400; letter-spacing: 1px; line-height: 1.25; }
+        .dv-team-tag {
+            flex-shrink: 0; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+            color: var(--grey); border: 1px solid rgba(255,255,255,0.18); border-radius: 50px;
+            padding: 5px 10px; white-space: nowrap;
+        }
+        .dv-team.partner .dv-team-tag { color: var(--div-accent); border-color: var(--div-accent); }
+        .dv-team p { font-size: 14.5px; font-weight: 300; line-height: 1.7; color: var(--grey-light); }
+        @media (max-width: 900px) { .dv-team-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 560px) { .dv-team-grid { grid-template-columns: 1fr; } }
+
         /* ENTRY */
         .dv-entry {
             position: relative; padding: 140px 30px; text-align: center; background: #050505;
@@ -167,6 +202,26 @@
     <section class="dv-stats">
         {% block stats %}{% endblock %}
     </section>
+
+    {% if teams %}
+    <section class="dv-teams">
+        <div class="dv-teams-inner">
+            <h2 class="reveal">{% block teams_heading %}Our <em>Sub-teams</em>{% endblock %}</h2>
+            <p class="dv-teams-lede reveal">{% block teams_lede %}You pick a sub-team when you apply. Every one of them takes complete beginners.{% endblock %}</p>
+            <div class="dv-team-grid">
+                {% for team in teams %}
+                <div class="dv-team reveal{% if team.partner %} partner{% endif %}">
+                    <div class="dv-team-top">
+                        <h3>{{ team.name }}</h3>
+                        {% if team.partner %}<span class="dv-team-tag">{{ team.partner }} led</span>{% elif not team.is_recruiting %}<span class="dv-team-tag">Not recruiting</span>{% endif %}
+                    </div>
+                    {% if team.tagline %}<p>{{ team.tagline }}</p>{% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
 
     <section class="dv-entry">
         <h2 class="reveal">{% block entry_heading %}Our Entry{% endblock %}</h2>

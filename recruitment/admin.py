@@ -16,7 +16,9 @@ class RecruitmentSettingsAdmin(admin.ModelAdmin):
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ('name', 'tagline', 'is_recruiting')
+    list_display = ('name', 'division', 'sort_order', 'partner', 'is_recruiting')
+    list_filter = ('division', 'is_recruiting')
+    list_editable = ('sort_order', 'is_recruiting')
     filter_horizontal = ('leads',)
 
 

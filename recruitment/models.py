@@ -53,6 +53,11 @@ class Team(models.Model):
     name = models.CharField(max_length=80)
     sort_order = models.PositiveSmallIntegerField(default=0)
     tagline = models.CharField(max_length=160, blank=True)
+    partner = models.CharField(
+        max_length=40, blank=True,
+        help_text='Partner society that runs this sub-team, e.g. "UGA". '
+                  'Leave blank for HFR-run teams.',
+    )
     leads = models.ManyToManyField(
         settings.AUTH_USER_MODEL, blank=True, related_name='led_teams'
     )

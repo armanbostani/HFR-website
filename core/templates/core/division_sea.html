@@ -12,7 +12,7 @@
 {% block hero_title %}Sea <em>Division</em>{% endblock %}
 
 {% block statement %}
-    <p>Our Sea Division designs, builds and races Vital Spark, a hydrogen powered race boat, and carries HFR's first official competition entry.</p>
+    <p>Our Sea Division raced Vital Spark at Monaco, HFR's first official competition entry, and is now building its own Energy Class boat for the Monaco Energy Boat Challenge.</p>
     <p>Our division focuses on <em>speed</em> and <em>energy efficiency</em> on the water.</p>
 {% endblock %}
 
@@ -25,15 +25,17 @@
 {% endblock %}
 
 {% block stats %}
-    <div class="dv-stat reveal"><div class="n">Vital Spark</div><div class="l">Our Vessel</div></div>
+    <div class="dv-stat reveal"><div class="n">Vital Spark</div><div class="l">First Entry</div></div>
     <div class="dv-stat reveal"><div class="n">H&#8322;</div><div class="l">Fuel Cell Power</div></div>
     <div class="dv-stat reveal"><div class="n">13th</div><div class="l">MEBC Debut</div></div>
     <div class="dv-stat reveal"><div class="n">Monaco</div><div class="l">Race Location</div></div>
 {% endblock %}
 
+{% block teams_lede %}In the Energy Class the organisers supply the hull and the team builds everything that makes it go. You pick a sub-team when you apply.{% endblock %}
+
 {% block entry_href %}{% url 'project_boat' %}{% endblock %}
-{% block entry_name %}VITAL SPARK{% endblock %}
-{% block entry_sub %}Our energy class race boat, bound for Monaco. See the project.{% endblock %}
+{% block entry_name %}ENERGY CLASS BOAT{% endblock %}
+{% block entry_sub %}HFR's own race boat for Monaco, in design now. See the project.{% endblock %}
 
 {% block comp %}
     <div class="dv-comp-mark">The Competition</div>
@@ -47,4 +49,4 @@
 {% endblock %}
 
 {% block join_title %}Race the <em>Mediterranean</em>{% endblock %}
-{% block join_copy %}Hull design, propulsion, electronics, race strategy. Help take Vital Spark from the workshop to Monaco's harbour.{% endblock %}
+{% block join_copy %}Hull design, propulsion, electronics, race strategy. Help take HFR's own boat from the workshop to Monaco's harbour.{% endblock %}
