@@ -51,7 +51,9 @@ echo "== environment file"
 if [ ! -f /etc/hfr-website.env ]; then
     cp $APP/deploy/hfr-website.env.example /etc/hfr-website.env
     chmod 600 /etc/hfr-website.env
-    KEY=$($APP/venv/bin/python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())")
+    # URL-safe alphabet only: Django's get_random_secret_key() emits $, & and
+    # similar, which break both the sed replacement and sourcing the file.
+    KEY=$($APP/venv/bin/python -c "import secrets; print(secrets.token_urlsafe(50))")
     sed -i "s|^DJANGO_SECRET_KEY=.*|DJANGO_SECRET_KEY=$KEY|" /etc/hfr-website.env
     sed -i "s|example\.org|$DOMAIN|g" /etc/hfr-website.env
     echo
@@ -94,4 +96,4 @@ fi
 echo
 echo "Done. Site: https://$DOMAIN"
 echo "Next: create the admin account:"
-echo "  sudo -u hfr bash -c 'set -a; . /etc/hfr-website.env; $APP/venv/bin/python $APP/manage.py createsuperuser'"
+echo "  sudo bash -c 'set -a; . /etc/hfr-website.env; exec sudo -E -u hfr $APP/venv/bin/python $APP/manage.py createsuperuser'"

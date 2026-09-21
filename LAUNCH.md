@@ -33,7 +33,7 @@ systemd, configures nginx and gets a Let's Encrypt certificate.
 Then create the admin account:
 
 ```bash
-sudo -u hfr bash -c 'set -a; . /etc/hfr-website.env; /srv/hfr-website/app/venv/bin/python /srv/hfr-website/app/manage.py createsuperuser'
+sudo bash -c 'set -a; . /etc/hfr-website.env; exec sudo -E -u hfr /srv/hfr-website/app/venv/bin/python /srv/hfr-website/app/manage.py createsuperuser'
 ```
 
 ## 3. Before opening recruitment
