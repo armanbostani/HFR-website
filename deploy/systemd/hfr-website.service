@@ -1,0 +1,27 @@
+[Unit]
+Description=HFR website (Django via gunicorn)
+After=network.target
+
+[Service]
+User=hfr
+Group=www-data
+WorkingDirectory=/srv/hfr-website/app
+EnvironmentFile=/etc/hfr-website.env
+RuntimeDirectory=hfr-website
+RuntimeDirectoryMode=0775
+ExecStart=/srv/hfr-website/app/venv/bin/gunicorn hfr_site.wsgi \
+    --workers 3 \
+    --bind unix:/run/hfr-website/gunicorn.sock \
+    --umask 007 \
+    --access-logfile - --error-logfile -
+Restart=always
+RestartSec=3
+
+# Hardening: the app may only write to its own data folders
+ProtectSystem=strict
+ReadWritePaths=/srv/hfr-website/app/db.sqlite3 /srv/hfr-website/app /srv/hfr-website/media /srv/hfr-website/private_media
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

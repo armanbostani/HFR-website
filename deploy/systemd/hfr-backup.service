@@ -1,0 +1,7 @@
+[Unit]
+Description=HFR website nightly backup (database, avatars, CVs)
+
+[Service]
+Type=oneshot
+User=hfr
+ExecStart=/srv/hfr-website/app/deploy/backup.sh

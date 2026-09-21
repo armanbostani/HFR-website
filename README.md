@@ -108,7 +108,8 @@ venv/bin/python manage.py test recruitment
 
 ## Deploying
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for the launch checklist: required
+See [LAUNCH.md](LAUNCH.md) for the step-by-step server install (scripts in
+`deploy/`) and [DEPLOYMENT.md](DEPLOYMENT.md) for the checklist: required
 environment variables, email setup for password resets, and the warning about
 never shipping the development database.
 
